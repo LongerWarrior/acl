@@ -24,10 +24,10 @@
 
 #include <catch.hpp>
 
-#include <acl/math/transform_32.h>
-#include <acl/math/transform_64.h>
+#include <acl1_3/math/transform_32.h>
+#include <acl1_3/math/transform_64.h>
 
-using namespace acl;
+using namespace acl1_3;
 
 template<typename TransformType, typename FloatType>
 static void test_transform_impl(const TransformType& identity, const FloatType threshold)

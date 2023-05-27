@@ -17,9 +17,9 @@ Selecting the right [error metric](error_metrics.md) is important and you will w
 The last important setting to choose is the `error_threshold`. This is used in conjunction with the error metric and the virtual vertex distance from the [skeleton](creating_a_skeleton.md) in order to guarantee that a certain quality is maintained. A default value of **0.01cm** is safe to use and it most likely should never be changed unless the units you are using differ. If you do run into issues where compression artifacts are visible, in all likelihood the virtual vertex distance used on the problematic bones is not conservative enough.
 
 ```c++
-#include <acl/algorithm/uniformly_sampled/encoder.h>
+#include <acl1_3/algorithm/uniformly_sampled/encoder.h>
 
-using namespace acl;
+using namespace acl1_3;
 
 CompressionSettings settings;
 settings.level = CompressionLevel8::Medium;

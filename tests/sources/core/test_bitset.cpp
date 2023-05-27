@@ -24,11 +24,11 @@
 
 #include <catch.hpp>
 
-#include <acl/core/bitset.h>
+#include <acl1_3/core/bitset.h>
 
 #include <cstring>
 
-using namespace acl;
+using namespace acl1_3;
 
 TEST_CASE("bitset", "[core][utils]")
 {

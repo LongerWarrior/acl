@@ -39,24 +39,24 @@
 	namespace sjson { class ArrayWriter; }
 #endif
 
-#include "acl/core/ansi_allocator.h"
-#include "acl/core/floating_point_exceptions.h"
-#include "acl/core/iallocator.h"
-#include "acl/core/range_reduction_types.h"
-#include "acl/core/string.h"
-#include "acl/core/impl/debug_track_writer.h"
-#include "acl/compression/animation_clip.h"
-#include "acl/compression/compress.h"
-#include "acl/compression/skeleton.h"
-#include "acl/compression/skeleton_error_metric.h"
-#include "acl/compression/stream/write_decompression_stats.h"
-#include "acl/compression/track_error.h"
-#include "acl/compression/utils.h"
-#include "acl/decompression/decompress.h"
-#include "acl/io/clip_reader.h"
+#include "acl1_3/core/ansi_allocator.h"
+#include "acl1_3/core/floating_point_exceptions.h"
+#include "acl1_3/core/iallocator.h"
+#include "acl1_3/core/range_reduction_types.h"
+#include "acl1_3/core/string.h"
+#include "acl1_3/core/impl/debug_track_writer.h"
+#include "acl1_3/compression/animation_clip.h"
+#include "acl1_3/compression/compress.h"
+#include "acl1_3/compression/skeleton.h"
+#include "acl1_3/compression/skeleton_error_metric.h"
+#include "acl1_3/compression/stream/write_decompression_stats.h"
+#include "acl1_3/compression/track_error.h"
+#include "acl1_3/compression/utils.h"
+#include "acl1_3/decompression/decompress.h"
+#include "acl1_3/io/clip_reader.h"
 
-#include "acl/algorithm/uniformly_sampled/encoder.h"
-#include "acl/algorithm/uniformly_sampled/decoder.h"
+#include "acl1_3/algorithm/uniformly_sampled/encoder.h"
+#include "acl1_3/algorithm/uniformly_sampled/decoder.h"
 
 #include <cstring>
 #include <cstdio>
@@ -118,7 +118,7 @@
 
 #endif    // _WIN32
 
-using namespace acl;
+using namespace acl1_3;
 
 struct Options
 {
@@ -509,7 +509,7 @@ static void validate_accuracy(IAllocator& allocator, const track_array& raw_trac
 	(void)regression_error_threshold;
 
 #if defined(ACL_HAS_ASSERT_CHECKS)
-	using namespace acl_impl;
+	using namespace acl1_3_impl;
 
 	const float regression_error_thresholdf = static_cast<float>(regression_error_threshold);
 	const rtm::vector4f regression_error_thresholdv = rtm::vector_set(regression_error_thresholdf);

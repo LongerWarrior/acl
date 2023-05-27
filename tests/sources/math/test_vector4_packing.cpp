@@ -24,12 +24,12 @@
 
 #include <catch.hpp>
 
-#include <acl/math/scalar_32.h>
-#include <acl/math/vector4_packing.h>
+#include <acl1_3/math/scalar_32.h>
+#include <acl1_3/math/vector4_packing.h>
 
 #include <cstring>
 
-using namespace acl;
+using namespace acl1_3;
 
 struct UnalignedBuffer
 {

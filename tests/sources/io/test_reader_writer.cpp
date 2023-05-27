@@ -33,11 +33,11 @@
 	#include <sjson/writer.h>
 #endif
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/io/clip_reader.h>
-#include <acl/io/clip_writer.h>
-#include <acl/math/math.h>
-#include <acl/math/scalar_32.h>
+#include <acl1_3/core/ansi_allocator.h>
+#include <acl1_3/io/clip_reader.h>
+#include <acl1_3/io/clip_writer.h>
+#include <acl1_3/math/math.h>
+#include <acl1_3/math/scalar_32.h>
 
 #include <chrono>
 #include <cstdio>
@@ -95,7 +95,7 @@
 	#include <conio.h>
 #endif    // _WIN32
 
-using namespace acl;
+using namespace acl1_3;
 
 #if defined(ACL_SSE2_INTRINSICS) && defined(ACL_USE_SJSON)
 #ifdef _WIN32

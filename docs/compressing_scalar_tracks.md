@@ -7,9 +7,9 @@ For now, we only implement a single algorithm: [uniformly sampled](algorithm_uni
 Compression settings are currently required as an argument but not used. It is a placeholder.
 
 ```c++
-#include <acl/compression/compress.h>
+#include <acl1_3/compression/compress.h>
 
-using namespace acl;
+using namespace acl1_3;
 
 compression_settings settings;
 
