@@ -24,9 +24,9 @@
 
 #include <catch.hpp>
 
-#include <acl/math/scalar_packing.h>
+#include <acl1_2/math/scalar_packing.h>
 
-using namespace acl;
+using namespace acl1_2;
 
 TEST_CASE("scalar packing math", "[math][scalar][packing]")
 {

@@ -28,12 +28,12 @@
 #define ACL_ALLOCATOR_TRACK_NUM_ALLOCATIONS
 #define ACL_ALLOCATOR_TRACK_ALL_ALLOCATIONS
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/core/string.h>
+#include <acl1_2/core/ansi_allocator.h>
+#include <acl1_2/core/string.h>
 
 #include <cstring>
 
-using namespace acl;
+using namespace acl1_2;
 
 TEST_CASE("String", "[core][string]")
 {

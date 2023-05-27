@@ -5,8 +5,8 @@ Once you have a [compressed clip](compressing_a_raw_clip.md), the first order of
 The next thing you need is a `DecompressionContext` instance. This will allow you to actually decompress poses, bones, and tracks. You can also use it to seek arbitrarily in the clip. For safety, the decompression context is templated with the decompression settings.
 
 ```c++
-using namespace acl;
-using namespace acl::uniformly_sampled;
+using namespace acl1_2;
+using namespace acl1_2::uniformly_sampled;
 
 DecompressionContext<DefaultDecompressionSettings> context;
 

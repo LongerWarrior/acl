@@ -24,11 +24,11 @@
 
 #include <catch.hpp>
 
-#include <acl/core/bit_manip_utils.h>
+#include <acl1_2/core/bit_manip_utils.h>
 
 //#include <cstring>
 
-using namespace acl;
+using namespace acl1_2;
 
 TEST_CASE("bit_manip_utils", "[core][utils]")
 {

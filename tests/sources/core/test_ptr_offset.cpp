@@ -24,9 +24,9 @@
 
 #include <catch.hpp>
 
-#include <acl/core/ptr_offset.h>
+#include <acl1_2/core/ptr_offset.h>
 
-using namespace acl;
+using namespace acl1_2;
 
 TEST_CASE("ptr_offset", "[core][memory]")
 {

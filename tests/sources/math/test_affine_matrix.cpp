@@ -24,12 +24,12 @@
 
 #include <catch.hpp>
 
-#include <acl/math/affine_matrix_32.h>
-#include <acl/math/affine_matrix_64.h>
-#include <acl/math/transform_32.h>
-#include <acl/math/transform_64.h>
+#include <acl1_2/math/affine_matrix_32.h>
+#include <acl1_2/math/affine_matrix_64.h>
+#include <acl1_2/math/transform_32.h>
+#include <acl1_2/math/transform_64.h>
 
-using namespace acl;
+using namespace acl1_2;
 
 template<typename MatrixType, typename TransformType, typename FloatType>
 static void test_affine_matrix_impl(const MatrixType& identity, const FloatType threshold)
