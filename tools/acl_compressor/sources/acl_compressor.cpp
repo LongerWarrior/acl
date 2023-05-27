@@ -36,19 +36,19 @@
 
 #include <sjson/parser.h>
 
-#include "acl/core/iallocator.h"
-#include "acl/core/range_reduction_types.h"
-#include "acl/core/ansi_allocator.h"
-#include "acl/core/string.h"
-#include "acl/compression/skeleton.h"
-#include "acl/compression/animation_clip.h"
-#include "acl/compression/utils.h"
-#include "acl/io/clip_reader.h"
-#include "acl/io/clip_writer.h"							// Included just so we compile it to test for basic errors
-#include "acl/compression/skeleton_error_metric.h"
+#include "acl1_1/core/iallocator.h"
+#include "acl1_1/core/range_reduction_types.h"
+#include "acl1_1/core/ansi_allocator.h"
+#include "acl1_1/core/string.h"
+#include "acl1_1/compression/skeleton.h"
+#include "acl1_1/compression/animation_clip.h"
+#include "acl1_1/compression/utils.h"
+#include "acl1_1/io/clip_reader.h"
+#include "acl1_1/io/clip_writer.h"							// Included just so we compile it to test for basic errors
+#include "acl1_1/compression/skeleton_error_metric.h"
 
-#include "acl/algorithm/uniformly_sampled/encoder.h"
-#include "acl/algorithm/uniformly_sampled/decoder.h"
+#include "acl1_1/algorithm/uniformly_sampled/encoder.h"
+#include "acl1_1/algorithm/uniformly_sampled/decoder.h"
 
 #include <cstring>
 #include <cstdio>
@@ -110,7 +110,7 @@
 
 #endif    // _WIN32
 
-using namespace acl;
+using namespace acl1_1;
 
 struct Options
 {

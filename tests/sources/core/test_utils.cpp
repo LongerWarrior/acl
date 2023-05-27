@@ -24,9 +24,9 @@
 
 #include <catch.hpp>
 
-#include <acl/core/utils.h>
+#include <acl1_1/core/utils.h>
 
-using namespace acl;
+using namespace acl1_1;
 
 TEST_CASE("misc utils", "[core][utils]")
 {

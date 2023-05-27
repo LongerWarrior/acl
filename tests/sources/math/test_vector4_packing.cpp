@@ -24,11 +24,11 @@
 
 #include <catch.hpp>
 
-#include <acl/math/vector4_packing.h>
+#include <acl1_1/math/vector4_packing.h>
 
 #include <cstring>
 
-using namespace acl;
+using namespace acl1_1;
 
 TEST_CASE("vector4 packing math", "[math][vector4][packing]")
 {

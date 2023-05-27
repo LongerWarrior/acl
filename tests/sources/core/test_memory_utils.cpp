@@ -24,13 +24,13 @@
 
 #include <catch.hpp>
 
-#include <acl/core/memory_utils.h>
+#include <acl1_1/core/memory_utils.h>
 
 #include <cstdint>
 #include <cstring>
 #include <limits>
 
-using namespace acl;
+using namespace acl1_1;
 
 TEST_CASE("misc tests", "[core][memory]")
 {

@@ -24,10 +24,10 @@
 
 #include <catch.hpp>
 
-#include <acl/core/interpolation_utils.h>
-#include <acl/math/scalar_32.h>
+#include <acl1_1/core/interpolation_utils.h>
+#include <acl1_1/math/scalar_32.h>
 
-using namespace acl;
+using namespace acl1_1;
 
 TEST_CASE("interpolation utils", "[core][utils]")
 {

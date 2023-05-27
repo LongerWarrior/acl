@@ -24,14 +24,14 @@
 
 #include <catch.hpp>
 
-#include <acl/math/quat_32.h>
-#include <acl/math/quat_64.h>
-#include <acl/math/vector4_32.h>
-#include <acl/math/vector4_64.h>
+#include <acl1_1/math/quat_32.h>
+#include <acl1_1/math/quat_64.h>
+#include <acl1_1/math/vector4_32.h>
+#include <acl1_1/math/vector4_64.h>
 
 #include <limits>
 
-using namespace acl;
+using namespace acl1_1;
 
 template<typename QuatType, typename Vector4Type, typename FloatType>
 static Vector4Type quat_rotate_scalar(const QuatType& rotation, const Vector4Type& vector)
@@ -67,7 +67,7 @@ static FloatType scalar_dot(const QuatType& lhs, const QuatType& rhs)
 template<typename QuatType, typename FloatType>
 static QuatType scalar_normalize(const QuatType& input)
 {
-	FloatType inv_len = FloatType(1.0) / acl::sqrt(scalar_dot<QuatType, FloatType>(input, input));
+	FloatType inv_len = FloatType(1.0) / acl1_1::sqrt(scalar_dot<QuatType, FloatType>(input, input));
 	return quat_set(quat_get_x(input) * inv_len, quat_get_y(input) * inv_len, quat_get_z(input) * inv_len, quat_get_w(input) * inv_len);
 }
 
