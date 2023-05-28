@@ -24,12 +24,12 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/utils.h>
+#include <acl2_0/core/utils.h>
 #include <rtm/scalarf.h>
 
 #include <limits>
 
-using namespace acl;
+using namespace acl2_0;
 using namespace rtm;
 
 TEST_CASE("misc utils", "[core][utils]")

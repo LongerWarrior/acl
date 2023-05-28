@@ -6,10 +6,10 @@ See [here](https://github.com/nfrechette/acl-ue4-plugin) to take a look at how t
 
 ## How to build a database
 
-In order to be able to build a database with the right key frames, metadata must be added during compression. To do so, make sure to enable `include_contributing_error` inside your `acl::compression_settings`.
+In order to be able to build a database with the right key frames, metadata must be added during compression. To do so, make sure to enable `include_contributing_error` inside your `acl2_0::compression_settings`.
 
 ```c++
-acl::compression_settings settings = acl::get_default_compression_settings();
+acl2_0::compression_settings settings = acl2_0::get_default_compression_settings();
 settings.include_contributing_error = true;
 ```
 
@@ -27,23 +27,23 @@ If some quality tiers aren't necessary on your platform of choice (e.g. mobile),
 
 At runtime, animation clips that are bound to a database can be decompressed without the database. If you attempt to do so, only the data within the clip will be used (lowest visual quality).
 
-In order to use a database, a [acl::database_context](../includes/decompression/database/database.h) must be created for it.
+In order to use a database, a [acl2_0::database_context](../includes/decompression/database/database.h) must be created for it.
 
 ```c++
-const acl::compressed_database* database = ...
-acl::iallocator& allocator = ...
+const acl2_0::compressed_database* database = ...
+acl2_0::iallocator& allocator = ...
 
-acl::database_context<acl::default_database_settings> database_context;
+acl2_0::database_context<acl2_0::default_database_settings> database_context;
 database_context.initialize(allocator, *database);
 ```
 
-The above will work if the database contains its bulk data inline (if it hasn't been stripped). To support streaming (whether from memory, memory mapped, network, or other IO) a [acl::database_streamer](../includes/acl/decompression/database/database_streamer.h) must be provided. See the linked header for details on how to implement it.
+The above will work if the database contains its bulk data inline (if it hasn't been stripped). To support streaming (whether from memory, memory mapped, network, or other IO) a [acl2_0::database_streamer](../includes/acl/decompression/database/database_streamer.h) must be provided. See the linked header for details on how to implement it.
 
 ```c++
-acl::null_database_streamer medium_streamer(medium_data, medium_data_size);
-acl::null_database_streamer low_streamer(low_data, low_data_size);
+acl2_0::null_database_streamer medium_streamer(medium_data, medium_data_size);
+acl2_0::null_database_streamer low_streamer(low_data, low_data_size);
 
-acl::database_context<acl::default_database_settings> database_context;
+acl2_0::database_context<acl2_0::default_database_settings> database_context;
 database_context.initialize(allocator, *database, medium_streamer, low_streamer);
 ```
 
@@ -52,14 +52,14 @@ If a quality tier has been stripped, its streamer will never be used and any str
 When the time comes to decompress, simply provide the database context alongside the compressed tracks data and make sure database support is enabled in your decompression settings (by default that code is stripped).
 
 ```c++
-struct my_decompression_settings : acl::default_transform_decompression_settings
+struct my_decompression_settings : acl2_0::default_transform_decompression_settings
 {
 	using database_settings_type = default_database_settings;
 };
 
-const acl::compressed_tracks* compressed_clip_data = ...
+const acl2_0::compressed_tracks* compressed_clip_data = ...
 
-acl::decompression_context<my_decompression_settings> context;
+acl2_0::decompression_context<my_decompression_settings> context;
 context.initialize(compressed_clip_data, database_context);
 ```
 

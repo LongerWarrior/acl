@@ -10,9 +10,9 @@ For now, we only implement a single algorithm: [uniformly sampled](algorithm_uni
 *Segmenting is currently not supported by scalar tracks.*
 
 ```c++
-#include <acl/compression/compress.h>
+#include <acl2_0/compression/compress.h>
 
-using namespace acl;
+using namespace acl2_0;
 
 compression_settings settings;
 
@@ -32,9 +32,9 @@ Selecting the right [error metric](error_metrics.md) is important and you will w
 The last important setting to choose is the `error_threshold`. This is used in conjunction with the error metric and the virtual vertex distance (shell distance) in order to guarantee that a certain quality is maintained. A default value of **0.01cm** is safe to use and it most likely should never be changed unless the units you are using differ. If you do run into issues where compression artifacts are visible, in all likelihood the virtual vertex distance used on the problematic bones is not conservative enough.
 
 ```c++
-#include <acl/compression/compress.h>
+#include <acl2_0/compression/compress.h>
 
-using namespace acl;
+using namespace acl2_0;
 
 compression_settings settings;
 settings.level = compression_level8::medium;

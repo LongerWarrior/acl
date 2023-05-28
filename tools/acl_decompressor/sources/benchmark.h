@@ -22,20 +22,20 @@
 // SOFTWARE.
 ////////////////////////////////////////////////////////////////////////////////
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/core/compressed_tracks.h>
+#include <acl2_0/core/ansi_allocator.h>
+#include <acl2_0/core/compressed_tracks.h>
 
 #include <benchmark/benchmark.h>
 
 #include <string>
 #include <vector>
 
-extern acl::ansi_allocator s_allocator;
+extern acl2_0::ansi_allocator s_allocator;
 
 void clear_benchmark_state();
 
 bool parse_metadata(const char* buffer, size_t buffer_size, std::string& out_clip_dir, std::vector<std::string>& out_clips);
 
-bool read_clip(const std::string& clip_dir, const std::string& clip, acl::iallocator& allocator, acl::compressed_tracks*& out_compressed_tracks);
+bool read_clip(const std::string& clip_dir, const std::string& clip, acl2_0::iallocator& allocator, acl2_0::compressed_tracks*& out_compressed_tracks);
 
-bool prepare_clip(const std::string& clip_name, const acl::compressed_tracks& raw_tracks, std::vector<acl::compressed_tracks*>& out_compressed_clips);
+bool prepare_clip(const std::string& clip_name, const acl2_0::compressed_tracks& raw_tracks, std::vector<acl2_0::compressed_tracks*>& out_compressed_clips);

@@ -33,9 +33,9 @@
 	#include <sjson/writer.h>
 #endif
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/io/clip_reader.h>
-#include <acl/io/clip_writer.h>
+#include <acl2_0/core/ansi_allocator.h>
+#include <acl2_0/io/clip_reader.h>
+#include <acl2_0/io/clip_writer.h>
 
 #include <rtm/qvvd.h>
 #include <rtm/scalarf.h>
@@ -96,7 +96,7 @@
 	#include <conio.h>
 #endif    // _WIN32
 
-using namespace acl;
+using namespace acl2_0;
 
 #if defined(RTM_SSE2_INTRINSICS) && defined(ACL_USE_SJSON)
 #ifdef _WIN32
@@ -154,7 +154,7 @@ TEST_CASE("sjson_clip_reader_writer", "[io]")
 		track0[i].translation = rtm::vector_lerp(rtm::vector_zero(), track0[0].translation, 0.1F * float(i));
 		track0[i].scale = rtm::vector_lerp(rtm::vector_zero(), track0[0].scale, 0.1F * float(i));
 	}
-	track0.set_name(acl::string(allocator, "track 0"));
+	track0.set_name(acl2_0::string(allocator, "track 0"));
 	track_list[0] = track0.get_ref();
 
 	track_desc_transformf desc1;
@@ -175,7 +175,7 @@ TEST_CASE("sjson_clip_reader_writer", "[io]")
 		track1[i].translation = rtm::vector_lerp(rtm::vector_zero(), track1[0].translation, 0.1F * float(i));
 		track1[i].scale = rtm::vector_lerp(rtm::vector_zero(), track1[0].scale, 0.1F * float(i));
 	}
-	track1.set_name(acl::string(allocator, "track 1"));
+	track1.set_name(acl2_0::string(allocator, "track 1"));
 	track_list[1] = track1.get_ref();
 
 	track_qvvf track2 = track_qvvf::make_reserve(desc1, allocator, num_samples, 32.0F);
@@ -190,7 +190,7 @@ TEST_CASE("sjson_clip_reader_writer", "[io]")
 	}
 	track_list[2] = track2.get_ref();
 
-	track_list.set_name(acl::string(allocator, "some track list"));
+	track_list.set_name(acl2_0::string(allocator, "some track list"));
 
 	compression_settings settings;
 	settings.level = compression_level8::high;

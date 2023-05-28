@@ -9,9 +9,9 @@ Once you have an [allocator instance](implementing_an_allocator.md), the next st
 *  Access to the [Realtime Math](../external/README.md) headers since its types are used by the API
 
 ```c++
-#include <acl/compression/track_array.h>
+#include <acl2_0/compression/track_array.h>
 
-using namespace acl;
+using namespace acl2_0;
 
 uint32_t num_tracks = 4;
 uint32_t num_samples_per_track = 20;

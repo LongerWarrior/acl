@@ -10,7 +10,7 @@ Most code in ACL 1.3 used `CamelCase` but everything has now been migrated to `s
 
 ### Code organization
 
-All implementation details have now been moved into the `acl::acl_impl` namespace to avoid polluting the main namespace. Most of that code now also lives under `impl` directories (e.g. `acl/compression/impl/clip_context.h`).
+All implementation details have now been moved into the `acl2_0::acl_impl` namespace to avoid polluting the main namespace. Most of that code now also lives under `impl` directories (e.g. `acl/compression/impl/clip_context.h`).
 
 Furthermore, the public headers try and stay as lean as possible with only function and type signatures where possible. Implementation details have been moved to headers with a `.impl.h` suffix (e.g. `acl/compression/impl/compress.impl.h`).
 
@@ -20,9 +20,9 @@ Going forward, only code in public headers will be subject to deprecation rules 
 
 RTM started off as a fork of ACL that contained only its math and it is maintained separately. Types were renamed but most functions have kept the same name.
 
-* acl::Vector4_32 -> rtm::vector4f
-* acl::Quat_32 -> rtm::quatf
-* acl::Transform_32 -> rtm::qvvf
+* acl2_0::Vector4_32 -> rtm::vector4f
+* acl2_0::Quat_32 -> rtm::quatf
+* acl2_0::Transform_32 -> rtm::qvvf
 
 See the ACL source code for example usage but migrating should be mostly painless.
 
@@ -30,13 +30,13 @@ ACL now relies on RTM to detect the compiler used and the architecture being com
 
 ### New compression and decompression APIs
 
-ACL 1.3 introduced a new compression/decompression APIs for scalar tracks that used `acl::track_array` and `acl::track`. Both of these have typed aliases as well for the supported math types (e.g. `acl::track_qvvf`). ACL 2.0 now exclusively uses this new API even for hierarchical joint based animations. See [here](compressing_raw_tracks.md) for example compression usage.
+ACL 1.3 introduced a new compression/decompression APIs for scalar tracks that used `acl2_0::track_array` and `acl2_0::track`. Both of these have typed aliases as well for the supported math types (e.g. `acl2_0::track_qvvf`). ACL 2.0 now exclusively uses this new API even for hierarchical joint based animations. See [here](compressing_raw_tracks.md) for example compression usage.
 
-The same feature set is still supported but some parameters moved out of the `acl::CompressionSettings` (now called `acl::compression_settings`) and have been made tunable per individual track.
+The same feature set is still supported but some parameters moved out of the `acl2_0::CompressionSettings` (now called `acl2_0::compression_settings`) and have been made tunable per individual track.
 
 A single header now contains all compression related entry points under [acl/compression/compress.h](../includes/acl/compression/compress.h).
 
-The decompression API is very similar to the old one and migrating should be fairly straight forward. It relies on as much statically known information as possible via `acl::decompression_settings` to strip out as much unused code as possible. Backwards compatibility with older file formats is also controlled that way. A few other features are controlled that way as well. See [here](decompressing_a_track_list.md) for example decompression usage.
+The decompression API is very similar to the old one and migrating should be fairly straight forward. It relies on as much statically known information as possible via `acl2_0::decompression_settings` to strip out as much unused code as possible. Backwards compatibility with older file formats is also controlled that way. A few other features are controlled that way as well. See [here](decompressing_a_track_list.md) for example decompression usage.
 
 A single header now contains all decompression related entry points under [acl/decompression/decompress.h](../includes/acl/decompression/decompress.h).
 

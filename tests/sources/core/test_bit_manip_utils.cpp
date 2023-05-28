@@ -24,9 +24,9 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/bit_manip_utils.h>
+#include <acl2_0/core/bit_manip_utils.h>
 
-using namespace acl;
+using namespace acl2_0;
 
 TEST_CASE("bit_manip_utils", "[core][utils]")
 {

@@ -5,9 +5,9 @@ Once you have a [compressed track list](compressing_raw_tracks.md), the first or
 The next thing you need is a `decompression_context` instance. This will allow you to actually decompress tracks. You can also use it to seek arbitrarily in the list. For safety, the decompression context is templated with the decompression settings.
 
 ```c++
-#include "acl/decompression/decompress.h"
+#include "acl2_0/decompression/decompress.h"
 
-using namespace acl;
+using namespace acl2_0;
 
 decompression_context<default_decompression_settings> context;
 

@@ -24,9 +24,9 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/math/quat_packing.h>
+#include <acl2_0/math/quat_packing.h>
 
-using namespace acl;
+using namespace acl2_0;
 using namespace rtm;
 
 TEST_CASE("quat packing math", "[math][quat][packing]")

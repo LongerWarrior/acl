@@ -24,12 +24,12 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/error_result.h>
+#include <acl2_0/core/error_result.h>
 
 #include <cstdint>
 #include <cstring>
 
-using namespace acl;
+using namespace acl2_0;
 
 TEST_CASE("error_result", "[core][error]")
 {

@@ -28,10 +28,10 @@
 #define ACL_ALLOCATOR_TRACK_NUM_ALLOCATIONS
 #define ACL_ALLOCATOR_TRACK_ALL_ALLOCATIONS
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/core/memory_utils.h>
+#include <acl2_0/core/ansi_allocator.h>
+#include <acl2_0/core/memory_utils.h>
 
-using namespace acl;
+using namespace acl2_0;
 
 TEST_CASE("ANSI allocator", "[core][memory]")
 {

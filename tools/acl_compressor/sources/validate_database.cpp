@@ -24,25 +24,25 @@
 
 #include "acl_compressor.h"
 
-#include "acl/core/compressed_database.h"
-#include "acl/core/compressed_tracks.h"
-#include "acl/core/floating_point_exceptions.h"
-#include "acl/core/iallocator.h"
-#include "acl/compression/compress.h"
-#include "acl/compression/track_array.h"
-#include "acl/compression/track_error.h"
-#include "acl/compression/transform_error_metrics.h"
-#include "acl/decompression/decompress.h"
-#include "acl/decompression/database/database.h"
-#include "acl/decompression/database/null_database_streamer.h"	// Just to test compilation
-#include "acl/decompression/database/impl/debug_database_streamer.h"
+#include "acl2_0/core/compressed_database.h"
+#include "acl2_0/core/compressed_tracks.h"
+#include "acl2_0/core/floating_point_exceptions.h"
+#include "acl2_0/core/iallocator.h"
+#include "acl2_0/compression/compress.h"
+#include "acl2_0/compression/track_array.h"
+#include "acl2_0/compression/track_error.h"
+#include "acl2_0/compression/transform_error_metrics.h"
+#include "acl2_0/decompression/decompress.h"
+#include "acl2_0/decompression/database/database.h"
+#include "acl2_0/decompression/database/null_database_streamer.h"	// Just to test compilation
+#include "acl2_0/decompression/database/impl/debug_database_streamer.h"
 
-using namespace acl;
+using namespace acl2_0;
 
 #if defined(ACL_USE_SJSON) && defined(ACL_HAS_ASSERT_CHECKS)
-struct debug_transform_decompression_settings_with_db : public acl::debug_transform_decompression_settings
+struct debug_transform_decompression_settings_with_db : public acl2_0::debug_transform_decompression_settings
 {
-	using database_settings_type = acl::debug_database_settings;
+	using database_settings_type = acl2_0::debug_database_settings;
 };
 
 static void stream_in_database_tier(database_context<debug_database_settings>& context, const debug_database_streamer& streamer, const compressed_database& db, quality_tier tier)
@@ -53,10 +53,10 @@ static void stream_in_database_tier(database_context<debug_database_settings>& c
 	ACL_ASSERT((num_chunks == 0 && is_streamed_in) || !is_streamed_in, "Tier should not be streamed in");
 	ACL_ASSERT(streamer.get_bulk_data(tier) == nullptr, "Bulk data should not be allocated");
 
-	acl::database_stream_request_result stream_in_result = context.stream_in(tier, 2);
+	acl2_0::database_stream_request_result stream_in_result = context.stream_in(tier, 2);
 	const uint8_t* streamer_bulk_data = streamer.get_bulk_data(tier);
 
-	ACL_ASSERT((num_chunks == 0 && stream_in_result == database_stream_request_result::done) || stream_in_result == acl::database_stream_request_result::dispatched, "Failed to stream in tier");
+	ACL_ASSERT((num_chunks == 0 && stream_in_result == database_stream_request_result::done) || stream_in_result == acl2_0::database_stream_request_result::dispatched, "Failed to stream in tier");
 	ACL_ASSERT(num_chunks == 0 || streamer.get_bulk_data(tier) != nullptr, "Bulk data should be allocated");
 
 	is_streamed_in = context.is_streamed_in(tier);
@@ -64,7 +64,7 @@ static void stream_in_database_tier(database_context<debug_database_settings>& c
 
 	stream_in_result = context.stream_in(tier);
 
-	ACL_ASSERT((num_chunks <= 2 && stream_in_result == database_stream_request_result::done) || stream_in_result == acl::database_stream_request_result::dispatched, "Failed to stream in tier");
+	ACL_ASSERT((num_chunks <= 2 && stream_in_result == database_stream_request_result::done) || stream_in_result == acl2_0::database_stream_request_result::dispatched, "Failed to stream in tier");
 	ACL_ASSERT(num_chunks == 0 || streamer.get_bulk_data(tier) != nullptr, "Bulk data should be allocated");
 	ACL_ASSERT(streamer.get_bulk_data(tier) == streamer_bulk_data, "Bulk data should not have been reallocated");
 
@@ -81,9 +81,9 @@ static void stream_out_database_tier(database_context<debug_database_settings>& 
 	ACL_ASSERT(is_streamed_in, "Tier should be streamed in");
 	ACL_ASSERT(num_chunks == 0 || streamer.get_bulk_data(tier) != nullptr, "Bulk data should be allocated");
 
-	acl::database_stream_request_result stream_out_result = context.stream_out(tier, 2);
+	acl2_0::database_stream_request_result stream_out_result = context.stream_out(tier, 2);
 
-	ACL_ASSERT((num_chunks == 0 && stream_out_result == database_stream_request_result::done) || stream_out_result == acl::database_stream_request_result::dispatched, "Failed to stream out tier 1");
+	ACL_ASSERT((num_chunks == 0 && stream_out_result == database_stream_request_result::done) || stream_out_result == acl2_0::database_stream_request_result::dispatched, "Failed to stream out tier 1");
 	if (num_chunks <= 2)
 	{
 		ACL_ASSERT(streamer.get_bulk_data(tier) == nullptr, "Bulk data should not be allocated");
@@ -99,7 +99,7 @@ static void stream_out_database_tier(database_context<debug_database_settings>& 
 
 	stream_out_result = context.stream_out(tier);
 
-	ACL_ASSERT((num_chunks <= 2 && stream_out_result == database_stream_request_result::done) || stream_out_result == acl::database_stream_request_result::dispatched, "Failed to stream out tier 1");
+	ACL_ASSERT((num_chunks <= 2 && stream_out_result == database_stream_request_result::done) || stream_out_result == acl2_0::database_stream_request_result::dispatched, "Failed to stream out tier 1");
 	ACL_ASSERT(streamer.get_bulk_data(tier) == nullptr, "Bulk data should not be allocated");
 
 	is_streamed_out = !context.is_streamed_in(tier);
@@ -126,11 +126,11 @@ static void validate_db_streaming(iallocator& allocator, const track_array_qvvf&
 
 	decompression_context<debug_transform_decompression_settings_with_db> context0;
 	decompression_context<debug_transform_decompression_settings_with_db> context1;
-	database_context<acl::debug_database_settings> db_context;
+	database_context<acl2_0::debug_database_settings> db_context;
 	debug_database_streamer db_medium_streamer(allocator, db_bulk_data_medium, db.get_bulk_data_size(quality_tier::medium_importance));
 	debug_database_streamer db_low_streamer(allocator, db_bulk_data_low, db.get_bulk_data_size(quality_tier::lowest_importance));
-	ACL_ASSERT(db_medium_streamer.get_bulk_data(acl::quality_tier::medium_importance) == nullptr, "Bulk data should not be allocated");
-	ACL_ASSERT(db_low_streamer.get_bulk_data(acl::quality_tier::lowest_importance) == nullptr, "Bulk data should not be allocated");
+	ACL_ASSERT(db_medium_streamer.get_bulk_data(acl2_0::quality_tier::medium_importance) == nullptr, "Bulk data should not be allocated");
+	ACL_ASSERT(db_low_streamer.get_bulk_data(acl2_0::quality_tier::lowest_importance) == nullptr, "Bulk data should not be allocated");
 
 	bool initialized = db_context.initialize(allocator, db, db_medium_streamer, db_low_streamer);
 	initialized = initialized && context0.initialize(tracks0, db_context);
@@ -232,7 +232,7 @@ static void validate_db_stripping(iallocator& allocator, const track_array_qvvf&
 	{
 		decompression_context<debug_transform_decompression_settings_with_db> context0;
 		decompression_context<debug_transform_decompression_settings_with_db> context1;
-		database_context<acl::debug_database_settings> db_context;
+		database_context<acl2_0::debug_database_settings> db_context;
 		debug_database_streamer db_medium_streamer(allocator, db_bulk_data_medium, db.get_bulk_data_size(quality_tier::medium_importance));
 		debug_database_streamer db_low_streamer(allocator, db_bulk_data_low, db.get_bulk_data_size(quality_tier::lowest_importance));
 
@@ -269,7 +269,7 @@ static void validate_db_stripping(iallocator& allocator, const track_array_qvvf&
 
 		decompression_context<debug_transform_decompression_settings_with_db> context0;
 		decompression_context<debug_transform_decompression_settings_with_db> context1;
-		database_context<acl::debug_database_settings> db_context;
+		database_context<acl2_0::debug_database_settings> db_context;
 		debug_database_streamer db_medium_streamer(allocator, db_bulk_data_medium, db_no_medium->get_bulk_data_size(quality_tier::medium_importance));
 		debug_database_streamer db_low_streamer(allocator, db_bulk_data_low, db_no_medium->get_bulk_data_size(quality_tier::lowest_importance));
 
@@ -325,7 +325,7 @@ static void validate_db_stripping(iallocator& allocator, const track_array_qvvf&
 
 		decompression_context<debug_transform_decompression_settings_with_db> context0;
 		decompression_context<debug_transform_decompression_settings_with_db> context1;
-		database_context<acl::debug_database_settings> db_context;
+		database_context<acl2_0::debug_database_settings> db_context;
 		debug_database_streamer db_medium_streamer(allocator, db_bulk_data_medium, db_no_low->get_bulk_data_size(quality_tier::medium_importance));
 		debug_database_streamer db_low_streamer(allocator, db_bulk_data_low, db_no_low->get_bulk_data_size(quality_tier::lowest_importance));
 
@@ -387,7 +387,7 @@ static void validate_db_stripping(iallocator& allocator, const track_array_qvvf&
 
 		decompression_context<debug_transform_decompression_settings_with_db> context0;
 		decompression_context<debug_transform_decompression_settings_with_db> context1;
-		database_context<acl::debug_database_settings> db_context;
+		database_context<acl2_0::debug_database_settings> db_context;
 		debug_database_streamer db_medium_streamer(allocator, db_bulk_data_medium, db_neither0->get_bulk_data_size(quality_tier::medium_importance));
 		debug_database_streamer db_low_streamer(allocator, db_bulk_data_low, db_neither0->get_bulk_data_size(quality_tier::lowest_importance));
 
@@ -468,7 +468,7 @@ void validate_db(iallocator& allocator, const track_array_qvvf& raw_tracks, cons
 	const compression_database_settings& settings, const itransform_error_metric& error_metric,
 	const compressed_tracks& compressed_tracks0, const compressed_tracks& compressed_tracks1)
 {
-	using namespace acl_impl;
+	using namespace acl2_0_impl;
 
 	// We do not support building empty databases
 	if (compressed_tracks0.get_num_tracks() == 0 || compressed_tracks0.get_num_samples_per_track() == 0)
@@ -537,7 +537,7 @@ void validate_db(iallocator& allocator, const track_array_qvvf& raw_tracks, cons
 	// Reference error without the database with everything highest quality
 	track_error high_quality_tier_error_ref;
 	{
-		acl::decompression_context<debug_transform_decompression_settings_with_db> context;
+		acl2_0::decompression_context<debug_transform_decompression_settings_with_db> context;
 
 		const bool initialized = context.initialize(compressed_tracks0);
 		ACL_ASSERT(initialized, "Failed to initialize decompression context");
@@ -547,8 +547,8 @@ void validate_db(iallocator& allocator, const track_array_qvvf& raw_tracks, cons
 
 	// Make sure the databases agree with our reference
 	{
-		acl::decompression_context<debug_transform_decompression_settings_with_db> context;
-		acl::database_context<acl::debug_database_settings> db_context;
+		acl2_0::decompression_context<debug_transform_decompression_settings_with_db> context;
+		acl2_0::database_context<acl2_0::debug_database_settings> db_context;
 
 		bool initialized = db_context.initialize(allocator, *db0);
 		initialized = initialized && context.initialize(*db_tracks0[0], db_context);
@@ -559,8 +559,8 @@ void validate_db(iallocator& allocator, const track_array_qvvf& raw_tracks, cons
 	}
 
 	{
-		acl::decompression_context<debug_transform_decompression_settings_with_db> context;
-		acl::database_context<acl::debug_database_settings> db_context;
+		acl2_0::decompression_context<debug_transform_decompression_settings_with_db> context;
+		acl2_0::database_context<acl2_0::debug_database_settings> db_context;
 
 		bool initialized = db_context.initialize(allocator, *db1);
 		initialized = initialized && context.initialize(*db_tracks1[0], db_context);
@@ -571,9 +571,9 @@ void validate_db(iallocator& allocator, const track_array_qvvf& raw_tracks, cons
 	}
 
 	{
-		acl::decompression_context<debug_transform_decompression_settings_with_db> context0;
-		acl::decompression_context<debug_transform_decompression_settings_with_db> context1;
-		acl::database_context<acl::debug_database_settings> db_context;
+		acl2_0::decompression_context<debug_transform_decompression_settings_with_db> context0;
+		acl2_0::decompression_context<debug_transform_decompression_settings_with_db> context1;
+		acl2_0::database_context<acl2_0::debug_database_settings> db_context;
 
 		bool initialized = db_context.initialize(allocator, *db01);
 		initialized = initialized && context0.initialize(*db_tracks01[0], db_context);

@@ -24,22 +24,22 @@
 
 #include "acl_compressor.h"
 
-#include "acl/core/compressed_tracks.h"
-#include "acl/core/floating_point_exceptions.h"
-#include "acl/core/iallocator.h"
-#include "acl/compression/compress.h"
-#include "acl/compression/convert.h"
-#include "acl/compression/track_array.h"
-#include "acl/compression/track_error.h"
-#include "acl/compression/transform_error_metrics.h"
-#include "acl/decompression/decompress.h"
+#include "acl2_0/core/compressed_tracks.h"
+#include "acl2_0/core/floating_point_exceptions.h"
+#include "acl2_0/core/iallocator.h"
+#include "acl2_0/compression/compress.h"
+#include "acl2_0/compression/convert.h"
+#include "acl2_0/compression/track_array.h"
+#include "acl2_0/compression/track_error.h"
+#include "acl2_0/compression/transform_error_metrics.h"
+#include "acl2_0/decompression/decompress.h"
 
-using namespace acl;
+using namespace acl2_0;
 
 #if defined(ACL_USE_SJSON) && defined(ACL_HAS_ASSERT_CHECKS)
 void validate_accuracy(iallocator& allocator, const track_array_qvvf& raw_tracks, const track_array_qvvf& additive_base_tracks, const itransform_error_metric& error_metric, const compressed_tracks& compressed_tracks_, double regression_error_threshold)
 {
-	using namespace acl_impl;
+	using namespace acl2_0_impl;
 
 	// Disable floating point exceptions since decompression assumes it
 	scope_disable_fp_exceptions fp_off;
@@ -58,7 +58,7 @@ void validate_accuracy(iallocator& allocator, const track_array_qvvf& raw_tracks
 	const float vec3_error_threshold = 0.0F;
 #endif
 
-	acl::decompression_context<debug_transform_decompression_settings> context;
+	acl2_0::decompression_context<debug_transform_decompression_settings> context;
 
 	const bool initialized = context.initialize(compressed_tracks_);
 	ACL_ASSERT(initialized, "Failed to initialize decompression context"); (void)initialized;
@@ -107,7 +107,7 @@ void validate_accuracy(iallocator& allocator, const track_array_qvvf& raw_tracks
 
 void validate_accuracy(iallocator& allocator, const track_array& raw_tracks, const compressed_tracks& tracks, double regression_error_threshold)
 {
-	using namespace acl_impl;
+	using namespace acl2_0_impl;
 
 	// Disable floating point exceptions since decompression assumes it
 	scope_disable_fp_exceptions fp_off;
@@ -420,11 +420,11 @@ static void compare_raw_with_compressed(iallocator& allocator, const track_array
 	// Disable floating point exceptions since decompression assumes it
 	scope_disable_fp_exceptions fp_off;
 
-	acl::decompression_context<acl_impl::raw_sampling_decompression_settings> context;
+	acl2_0::decompression_context<acl2_0_impl::raw_sampling_decompression_settings> context;
 	context.initialize(compressed_tracks_);
 
 	const track_type8 track_type = raw_tracks.get_track_type();
-	acl_impl::debug_track_writer writer(allocator, track_type, num_tracks);
+	acl2_0_impl::debug_track_writer writer(allocator, track_type, num_tracks);
 
 	const uint32_t num_samples = raw_tracks.get_num_samples_per_track();
 	const float sample_rate = raw_tracks.get_sample_rate();

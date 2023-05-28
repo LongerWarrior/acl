@@ -24,11 +24,11 @@
 
 #include "benchmark.h"
 
-#include <acl/core/ansi_allocator.h>
-#include <acl/core/compressed_tracks.h>
-#include <acl/core/memory_utils.h>
-#include <acl/compression/compress.h>
-#include <acl/compression/convert.h>
+#include <acl2_0/core/ansi_allocator.h>
+#include <acl2_0/core/compressed_tracks.h>
+#include <acl2_0/core/memory_utils.h>
+#include <acl2_0/compression/compress.h>
+#include <acl2_0/compression/convert.h>
 
 #include <benchmark/benchmark.h>
 
@@ -89,10 +89,10 @@ enum class DecompressionFunction
 	Memcpy,
 };
 
-struct benchmark_transform_decompression_settings final : public acl::default_transform_decompression_settings
+struct benchmark_transform_decompression_settings final : public acl2_0::default_transform_decompression_settings
 {
 	// Only support our latest version
-	static constexpr acl::compressed_tracks_version16 version_supported() { return acl::compressed_tracks_version16::latest; }
+	static constexpr acl2_0::compressed_tracks_version16 version_supported() { return acl2_0::compressed_tracks_version16::latest; }
 
 	// No need for safety checks
 	static constexpr bool skip_initialize_safety_checks() { return true; }
@@ -100,10 +100,10 @@ struct benchmark_transform_decompression_settings final : public acl::default_tr
 
 struct benchmark_state
 {
-	acl::compressed_tracks* compressed_tracks = nullptr;	// Original clip
+	acl2_0::compressed_tracks* compressed_tracks = nullptr;	// Original clip
 
-	acl::compressed_tracks** decompression_instances = nullptr;
-	acl::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = nullptr;
+	acl2_0::compressed_tracks** decompression_instances = nullptr;
+	acl2_0::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = nullptr;
 	uint8_t* clip_copy_buffer = nullptr;
 	uint8_t* flush_buffer = nullptr;
 
@@ -111,15 +111,15 @@ struct benchmark_state
 	uint32_t clip_copy_buffer_size = 0;
 };
 
-acl::ansi_allocator s_allocator;
+acl2_0::ansi_allocator s_allocator;
 static benchmark_state s_benchmark_state;
 
 void clear_benchmark_state()
 {
-	acl::deallocate_type_array(s_allocator, s_benchmark_state.decompression_contexts, k_num_copies);
-	acl::deallocate_type_array(s_allocator, s_benchmark_state.decompression_instances, k_num_copies);
-	acl::deallocate_type_array(s_allocator, s_benchmark_state.clip_copy_buffer, s_benchmark_state.clip_copy_buffer_size);
-	acl::deallocate_type_array(s_allocator, s_benchmark_state.flush_buffer, k_padded_flush_buffer_size);
+	acl2_0::deallocate_type_array(s_allocator, s_benchmark_state.decompression_contexts, k_num_copies);
+	acl2_0::deallocate_type_array(s_allocator, s_benchmark_state.decompression_instances, k_num_copies);
+	acl2_0::deallocate_type_array(s_allocator, s_benchmark_state.clip_copy_buffer, s_benchmark_state.clip_copy_buffer_size);
+	acl2_0::deallocate_type_array(s_allocator, s_benchmark_state.flush_buffer, k_padded_flush_buffer_size);
 
 	s_benchmark_state = benchmark_state();
 }
@@ -129,12 +129,12 @@ static void allocate_static_buffers()
 	if (s_benchmark_state.flush_buffer != nullptr)
 		return;	// Already allocated
 
-	s_benchmark_state.decompression_instances = acl::allocate_type_array<acl::compressed_tracks*>(s_allocator, k_num_copies);
-	s_benchmark_state.decompression_contexts = acl::allocate_type_array<acl::decompression_context<benchmark_transform_decompression_settings>>(s_allocator, k_num_copies);
-	s_benchmark_state.flush_buffer = acl::allocate_type_array<uint8_t>(s_allocator, k_padded_flush_buffer_size);
+	s_benchmark_state.decompression_instances = acl2_0::allocate_type_array<acl2_0::compressed_tracks*>(s_allocator, k_num_copies);
+	s_benchmark_state.decompression_contexts = acl2_0::allocate_type_array<acl2_0::decompression_context<benchmark_transform_decompression_settings>>(s_allocator, k_num_copies);
+	s_benchmark_state.flush_buffer = acl2_0::allocate_type_array<uint8_t>(s_allocator, k_padded_flush_buffer_size);
 }
 
-static void setup_benchmark_state(acl::compressed_tracks& compressed_tracks)
+static void setup_benchmark_state(acl2_0::compressed_tracks& compressed_tracks)
 {
 	allocate_static_buffers();
 
@@ -145,17 +145,17 @@ static void setup_benchmark_state(acl::compressed_tracks& compressed_tracks)
 	const uint32_t pose_size = num_tracks * num_bytes_per_track;
 
 	// Each clip is rounded up to a multiple of our VMEM padding
-	const uint32_t padded_clip_size = acl::align_to(compressed_size, k_vmem_padding);
+	const uint32_t padded_clip_size = acl2_0::align_to(compressed_size, k_vmem_padding);
 	const uint32_t clip_buffer_size = padded_clip_size * k_num_copies;
 
-	acl::compressed_tracks** decompression_instances = s_benchmark_state.decompression_instances;
-	acl::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = s_benchmark_state.decompression_contexts;
+	acl2_0::compressed_tracks** decompression_instances = s_benchmark_state.decompression_instances;
+	acl2_0::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = s_benchmark_state.decompression_contexts;
 	uint8_t* clip_copy_buffer = s_benchmark_state.clip_copy_buffer;
 
 	if (clip_buffer_size > s_benchmark_state.clip_copy_buffer_size)
 	{
 		// Allocate our new clip copy buffer
-		clip_copy_buffer = acl::allocate_type_array_aligned<uint8_t>(s_allocator, clip_buffer_size, k_clip_buffer_alignment);
+		clip_copy_buffer = acl2_0::allocate_type_array_aligned<uint8_t>(s_allocator, clip_buffer_size, k_clip_buffer_alignment);
 
 		s_benchmark_state.clip_copy_buffer = clip_copy_buffer;
 		s_benchmark_state.clip_copy_buffer_size = clip_buffer_size;
@@ -169,7 +169,7 @@ static void setup_benchmark_state(acl::compressed_tracks& compressed_tracks)
 		uint8_t* buffer = clip_copy_buffer + (copy_index * padded_clip_size);
 		std::memcpy(buffer, &compressed_tracks, compressed_size);
 
-		decompression_instances[copy_index] = reinterpret_cast<acl::compressed_tracks*>(buffer);
+		decompression_instances[copy_index] = reinterpret_cast<acl2_0::compressed_tracks*>(buffer);
 	}
 
 	// Create our decompression contexts
@@ -188,7 +188,7 @@ static void memset_impl(uint8_t* buffer, size_t buffer_size, uint8_t value)
 
 static void benchmark_decompression(benchmark::State& state)
 {
-	acl::compressed_tracks& compressed_tracks = *reinterpret_cast<acl::compressed_tracks*>(state.range(0));
+	acl2_0::compressed_tracks& compressed_tracks = *reinterpret_cast<acl2_0::compressed_tracks*>(state.range(0));
 	const PlaybackDirection playback_direction = static_cast<PlaybackDirection>(state.range(1));
 	const DecompressionFunction decompression_function = static_cast<DecompressionFunction>(state.range(2));
 
@@ -218,13 +218,13 @@ static void benchmark_decompression(benchmark::State& state)
 		break;
 	}
 
-	acl::compressed_tracks** decompression_instances = s_benchmark_state.decompression_instances;
-	acl::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = s_benchmark_state.decompression_contexts;
+	acl2_0::compressed_tracks** decompression_instances = s_benchmark_state.decompression_instances;
+	acl2_0::decompression_context<benchmark_transform_decompression_settings>* decompression_contexts = s_benchmark_state.decompression_contexts;
 	uint8_t* flush_buffer = s_benchmark_state.flush_buffer;
 	const uint32_t pose_size = s_benchmark_state.pose_size;
 
 	const uint32_t num_tracks = compressed_tracks.get_num_tracks();
-	acl::acl_impl::debug_track_writer pose_writer(s_allocator, acl::track_type8::qvvf, num_tracks);
+	acl2_0::acl2_0_impl::debug_track_writer pose_writer(s_allocator, acl2_0::track_type8::qvvf, num_tracks);
 
 	// Flush the CPU cache
 	memset_impl(flush_buffer + k_vmem_padding, k_flush_buffer_size, 1);
@@ -240,8 +240,8 @@ static void benchmark_decompression(benchmark::State& state)
 
 		const float sample_time = sample_times[current_sample_index];
 
-		acl::decompression_context<benchmark_transform_decompression_settings>& context = decompression_contexts[current_context_index];
-		context.seek(sample_time, acl::sample_rounding_policy::none);
+		acl2_0::decompression_context<benchmark_transform_decompression_settings>& context = decompression_contexts[current_context_index];
+		context.seek(sample_time, acl2_0::sample_rounding_policy::none);
 
 		switch (decompression_function)
 		{
@@ -304,7 +304,7 @@ bool parse_metadata(const char* buffer, size_t buffer_size, std::string& out_cli
 	return true;
 }
 
-bool read_clip(const std::string& clip_dir, const std::string& clip, acl::iallocator& allocator, acl::compressed_tracks*& out_compressed_tracks)
+bool read_clip(const std::string& clip_dir, const std::string& clip, acl2_0::iallocator& allocator, acl2_0::compressed_tracks*& out_compressed_tracks)
 {
 	out_compressed_tracks = nullptr;
 
@@ -323,7 +323,7 @@ bool read_clip(const std::string& clip_dir, const std::string& clip, acl::ialloc
 
 #ifdef _WIN32
 	char path[64 * 1024] = { 0 };
-	snprintf(path, acl::get_array_size(path), "\\\\?\\%s", clip_filename.c_str());
+	snprintf(path, acl2_0::get_array_size(path), "\\\\?\\%s", clip_filename.c_str());
 	fopen_s(&file, path, "rb");
 #else
 	file = fopen(clip_filename.c_str(), "rb");
@@ -368,15 +368,15 @@ bool read_clip(const std::string& clip_dir, const std::string& clip, acl::ialloc
 		return false;
 	}
 
-	out_compressed_tracks = reinterpret_cast<acl::compressed_tracks*>(buffer);
+	out_compressed_tracks = reinterpret_cast<acl2_0::compressed_tracks*>(buffer);
 	return true;
 }
 
-bool prepare_clip(const std::string& clip_name, const acl::compressed_tracks& raw_tracks, std::vector<acl::compressed_tracks*>& out_compressed_clips)
+bool prepare_clip(const std::string& clip_name, const acl2_0::compressed_tracks& raw_tracks, std::vector<acl2_0::compressed_tracks*>& out_compressed_clips)
 {
 	printf("Preparing clip %s ...\n", clip_name.c_str());
 
-	acl::error_result result = raw_tracks.is_valid(false);
+	acl2_0::error_result result = raw_tracks.is_valid(false);
 	if (result.any())
 	{
 		printf("    Failed to validate clip!\n");
@@ -384,29 +384,29 @@ bool prepare_clip(const std::string& clip_name, const acl::compressed_tracks& ra
 	}
 
 	// Compress our clip
-	acl::track_array track_list;
-	result = acl::convert_track_list(s_allocator, raw_tracks, track_list);
+	acl2_0::track_array track_list;
+	result = acl2_0::convert_track_list(s_allocator, raw_tracks, track_list);
 	if (result.any())
 	{
 		printf("    Failed to convert clip!\n");
 		return false;
 	}
 
-	if (track_list.get_track_type() != acl::track_type8::qvvf)
+	if (track_list.get_track_type() != acl2_0::track_type8::qvvf)
 	{
 		printf("    Invalid clip track type!\n");
 		return false;
 	}
 
-	acl::compression_settings settings = acl::get_default_compression_settings();
+	acl2_0::compression_settings settings = acl2_0::get_default_compression_settings();
 
-	acl::qvvf_transform_error_metric error_metric;
+	acl2_0::qvvf_transform_error_metric error_metric;
 	settings.error_metric = &error_metric;
 
-	acl::output_stats stats;
+	acl2_0::output_stats stats;
 
-	acl::compressed_tracks* compressed_tracks = nullptr;
-	result = acl::compress_track_list(s_allocator, track_list, settings, compressed_tracks, stats);
+	acl2_0::compressed_tracks* compressed_tracks = nullptr;
+	result = acl2_0::compress_track_list(s_allocator, track_list, settings, compressed_tracks, stats);
 	if (result.any())
 	{
 		printf("    Failed to compress clip!\n");

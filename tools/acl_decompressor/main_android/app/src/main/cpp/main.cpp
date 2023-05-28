@@ -136,7 +136,7 @@ extern "C" jint Java_com_acl_decompressor_MainActivity_nativeMain(JNIEnv* env, j
 		return result;
 	}
 
-	std::vector<acl::compressed_tracks*> compressed_clips;
+	std::vector<acl2_0::compressed_tracks*> compressed_clips;
 	for (const std::string& clip : clips)
 	{
 		void* clip_buffer = nullptr;
@@ -147,7 +147,7 @@ extern "C" jint Java_com_acl_decompressor_MainActivity_nativeMain(JNIEnv* env, j
 			continue;
 		}
 
-		acl::compressed_tracks* raw_tracks = reinterpret_cast<acl::compressed_tracks*>(clip_buffer);
+		acl2_0::compressed_tracks* raw_tracks = reinterpret_cast<acl2_0::compressed_tracks*>(clip_buffer);
 
 		prepare_clip(clip, *raw_tracks, compressed_clips);
 
@@ -177,7 +177,7 @@ extern "C" jint Java_com_acl_decompressor_MainActivity_nativeMain(JNIEnv* env, j
 	// Clean up
 	clear_benchmark_state();
 
-	for (acl::compressed_tracks* compressed_tracks : compressed_clips)
+	for (acl2_0::compressed_tracks* compressed_tracks : compressed_clips)
 		s_allocator.deallocate(compressed_tracks, compressed_tracks->get_size());
 
 	if (num_failed_decompression != 0)

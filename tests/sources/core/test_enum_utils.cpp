@@ -24,11 +24,11 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/enum_utils.h>
+#include <acl2_0/core/enum_utils.h>
 
 #include <cstdint>
 
-using namespace acl;
+using namespace acl2_0;
 
 enum class TestEnum : uint32_t
 {

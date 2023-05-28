@@ -24,11 +24,11 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/variable_bit_rates.h>
-#include <acl/math/scalar_packing.h>
-#include <acl/math/vector4_packing.h>
+#include <acl2_0/core/variable_bit_rates.h>
+#include <acl2_0/math/scalar_packing.h>
+#include <acl2_0/math/vector4_packing.h>
 
-using namespace acl;
+using namespace acl2_0;
 using namespace rtm;
 
 struct UnalignedBuffer

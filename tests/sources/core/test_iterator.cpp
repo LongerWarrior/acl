@@ -24,12 +24,12 @@
 
 #include <catch2/catch.hpp>
 
-#include <acl/core/iterator.h>
-#include <acl/core/memory_utils.h>
+#include <acl2_0/core/iterator.h>
+#include <acl2_0/core/memory_utils.h>
 
 #include <cstdint>
 
-using namespace acl;
+using namespace acl2_0;
 
 TEST_CASE("iterator", "[core][iterator]")
 {

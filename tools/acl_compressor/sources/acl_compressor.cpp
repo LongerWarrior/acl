@@ -42,18 +42,18 @@
 
 #if defined(RTM_COMPILER_MSVC) && RTM_COMPILER_MSVC > RTM_COMPILER_MSVC_2015
 // VS2015 internal state appears to get corrupted when some forward declarations are made
-#include "acl/fwd.h"	// Make sure forward declaration matches
+#include "acl2_0/fwd.h"	// Make sure forward declaration matches
 #endif
 
-#include "acl/core/ansi_allocator.h"
-#include "acl/core/floating_point_exceptions.h"
-#include "acl/core/string.h"
-#include "acl/core/impl/debug_track_writer.h"
-#include "acl/compression/compress.h"
-#include "acl/compression/convert.h"
-#include "acl/compression/transform_pose_utils.h"	// Just to test compilation
-#include "acl/decompression/decompress.h"
-#include "acl/io/clip_reader.h"
+#include "acl2_0/core/ansi_allocator.h"
+#include "acl2_0/core/floating_point_exceptions.h"
+#include "acl2_0/core/string.h"
+#include "acl2_0/core/impl/debug_track_writer.h"
+#include "acl2_0/compression/compress.h"
+#include "acl2_0/compression/convert.h"
+#include "acl2_0/compression/transform_pose_utils.h"	// Just to test compilation
+#include "acl2_0/decompression/decompress.h"
+#include "acl2_0/io/clip_reader.h"
 
 #include <cstring>
 #include <cstdio>
@@ -115,7 +115,7 @@
 
 #endif    // _WIN32
 
-using namespace acl;
+using namespace acl2_0;
 
 struct Options
 {
@@ -564,7 +564,7 @@ static void try_algorithm(const Options& options, iallocator& allocator, const t
 			// Disable floating point exceptions since decompression assumes it
 			scope_disable_fp_exceptions fp_off;
 
-			acl::decompression_context<acl::debug_scalar_decompression_settings> context;
+			acl2_0::decompression_context<acl2_0::debug_scalar_decompression_settings> context;
 			context.initialize(*compressed_tracks_);
 
 			const track_error error = calculate_compression_error(allocator, track_list, context);
@@ -673,7 +673,7 @@ static bool read_file(iallocator& allocator, const char* input_filename, char*& 
 	return true;
 }
 
-static bool read_acl_bin_file(iallocator& allocator, const Options& options, acl::compressed_tracks*& out_tracks)
+static bool read_acl_bin_file(iallocator& allocator, const Options& options, acl2_0::compressed_tracks*& out_tracks)
 {
 	char* tracks_data = nullptr;
 	size_t file_size = 0;
@@ -688,7 +688,7 @@ static bool read_acl_bin_file(iallocator& allocator, const Options& options, acl
 		return false;
 #endif
 
-	out_tracks = reinterpret_cast<acl::compressed_tracks*>(tracks_data);
+	out_tracks = reinterpret_cast<acl2_0::compressed_tracks*>(tracks_data);
 	if (file_size != out_tracks->get_size() || out_tracks->is_valid(true).any())
 	{
 		printf("Invalid binary ACL file provided\n");
@@ -977,13 +977,13 @@ static int safe_main_impl(int argc, char* argv[])
 
 	if (is_input_acl_bin_file)
 	{
-		acl::compressed_tracks* bin_tracks = nullptr;
+		acl2_0::compressed_tracks* bin_tracks = nullptr;
 		if (!read_acl_bin_file(allocator, options, bin_tracks))
 			return -1;
 
 		if (bin_tracks->get_track_type() == track_type8::qvvf)
 		{
-			const acl::error_result result = acl::convert_track_list(allocator, *bin_tracks, transform_tracks);
+			const acl2_0::error_result result = acl2_0::convert_track_list(allocator, *bin_tracks, transform_tracks);
 			if (result.any())
 			{
 				printf("Failed to convert input binary track list\n");
@@ -995,7 +995,7 @@ static int safe_main_impl(int argc, char* argv[])
 		}
 		else
 		{
-			const acl::error_result result = acl::convert_track_list(allocator, *bin_tracks, scalar_tracks);
+			const acl2_0::error_result result = acl2_0::convert_track_list(allocator, *bin_tracks, scalar_tracks);
 			if (result.any())
 			{
 				printf("Failed to convert input binary track list\n");
@@ -1027,7 +1027,7 @@ static int safe_main_impl(int argc, char* argv[])
 	float new_sample_rate = 19200.0F;
 	uint32_t new_num_samples = calculate_num_samples(transform_tracks.get_duration(), new_sample_rate);
 	float new_duration = calculate_duration(new_num_samples, new_sample_rate);
-	acl_impl::debug_track_writer dummy_writer(allocator, track_type8::qvvf, transform_tracks.get_num_tracks());
+	acl2_0_impl::debug_track_writer dummy_writer(allocator, track_type8::qvvf, transform_tracks.get_num_tracks());
 
 	for (uint32_t track_index = 0; track_index < transform_tracks.get_num_tracks(); ++track_index)
 	{
